@@ -15,6 +15,12 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 
+// // Rutas de peticiones
+// app.use('/api/compra', require('./routes/compra'));
+// app.use('/api/funcion', require('./routes/funcion'));
+// app.use('/api/pelicula', require('./routes/pelicula'));
+app.use('/api/sala', require('./routes/sala'));
+
 // Conectar Vue con node sin fallos
 const history = require('connect-history-api-fallback');
 app.use(history());
