@@ -17,6 +17,7 @@ create table if not exists pelicula(
 	id int not null auto_increment,
     nombre varchar(30) not null,
     descr varchar(256) not null,
+    imagen varchar(256) not null,
     primary key(id)
 )ENGINE = INNODB;
 
