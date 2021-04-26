@@ -16,4 +16,22 @@ router.get('/get-peliculas', async(req, res) => {
     }
 })
 
+router.post('/agregar-pelicula', async(req, res) => {
+    try{
+        let { nombre, descr, imagen } = req.body;
+
+        await database.query(`INSERT INTO pelicula (nombre, descr, imagen ) VALUES ('${nombre}', '${descr}', '${imagen}')`);
+
+        res.json({
+            mensaje: 'PRODUCT_ADDED'
+        });
+    }
+    catch (error){
+        return res.status(400).json({
+            mensaje: 'Query Error',
+            error
+        });
+    }
+})
+
 module.exports = router;

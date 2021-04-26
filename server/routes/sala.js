@@ -16,4 +16,22 @@ router.get('/get-salas', async(req, res) => {
     }
 })
 
+router.post('/agregar-sala', async(req, res) => {
+    try{
+        let { n_filas, n_asientos } = req.body;
+
+        await database.query(`INSERT INTO sala (n_filas, n_asientos ) VALUES (${n_filas}, ${n_asientos})`);
+
+        res.json({
+            mensaje: 'PRODUCT_ADDED'
+        });
+    }
+    catch (error){
+        return res.status(400).json({
+            mensaje: 'Query Error',
+            error
+        });
+    }
+})
+
 module.exports = router;
