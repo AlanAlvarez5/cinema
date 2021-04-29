@@ -39,15 +39,6 @@ create table if not exists funcion(
         on update cascade
 )ENGINE = INNODB;
 
--- Compra que almacena solo el id y la fecha
-create table if not exists compra(
-	id int not null auto_increment,
-    fecha_hora datetime not null,
-    total int not null,
-    primary key(id)
-    
-)ENGINE = INNODB;
-
 -- Asiento (ligado a una función y no a la sala)
 create table if not exists asiento(
 	id varchar(5) not null,
@@ -63,18 +54,15 @@ create table if not exists asiento(
     
 )ENGINE = INNODB;
 
--- Detalle de la compra por asiento
-create table if not exists compra_asiento(
-	id_compra int not null,
-	id_asiento varchar(5) not null,
+-- Compra que almacena solo el id y la fecha
+create table if not exists compra(
+	id int not null auto_increment,
+    id_asiento varchar(5) not null,
     id_funcion int not null,
+    fecha_hora datetime not null,
+    total int not null,
     
-    
-    primary key(id_compra, id_asiento, id_funcion),
-    constraint fk_ca_compra foreign key(id_compra)
-		references compra(id)
-        on delete cascade
-        on update cascade,
+    primary key(id, id_asiento, id_funcion),
     constraint fk_ca_asiento foreign key(id_asiento)
 		references asiento(id)
         on delete cascade
@@ -83,4 +71,8 @@ create table if not exists compra_asiento(
 		references funcion(id)
         on delete cascade
         on update cascade
+        
+    
+    
 )ENGINE = INNODB;
+

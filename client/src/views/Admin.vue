@@ -1,42 +1,37 @@
 <template>
 	<v-container>
+		<!-- Componente de pestañas -->
 		<v-tabs fixed-tabs background-color="primary" dark v-model="tab">
 			<v-tab v-for="item in tabs" :key="item">
 				{{ item }}
 			</v-tab>
 		</v-tabs>
-
+		<!-- Tabla de datos -->
 		<v-data-table :headers="headers" :items="elementos" class="elevation-1">
 			<template v-slot:top>
 				<v-toolbar flat>
 					<v-toolbar-title>{{ tabs[tab] }}</v-toolbar-title>
 					<v-spacer></v-spacer>
 
-					<v-btn
-						color="primary"
-						dark
-						class="mb-2"
-						@click="agregar_dialog = true"
-					>
+					<v-btn color="primary" dark class="mb-2" @click="agregar_dialog = true">
 						Agregar {{ tabs[tab] }}
 					</v-btn>
 				</v-toolbar>
 			</template>
+			<!-- Mostrar imagen de pelicula solo si estamos en tab 1 -->
 			<template v-if="tab == 1" v-slot:item.test="{ item }">
-				<v-img
-					:src="item.imagen"
-					:alt="item.name"
-					width="150px"
-				></v-img>
+				<v-img :src="item.imagen" :alt="item.name" width="150px"></v-img>
 			</template>
 		</v-data-table>
 
+		<!-- Formulario para agregar elementos nuevos a la base de datos -->
 		<v-dialog v-model="agregar_dialog" width="500">
 			<v-card>
 				<v-card-title class="headline grey lighten-2">
 					Agregar {{ tabs[tab] }}
 				</v-card-title>
 				<v-card-text>
+					<!-- Campos para la pestaña 0 -->
 					<div v-if="this.tab == 0">
 						<v-text-field
 							v-model="nueva_funcion.id_pelicula"
@@ -55,6 +50,7 @@
 							label="Precio ($)"
 						></v-text-field>
 					</div>
+					<!-- Campos para la pestaña 1 -->
 					<div v-if="this.tab == 1">
 						<v-text-field
 							v-model="nueva_pelicula.nombre"
@@ -69,6 +65,7 @@
 							label="URL de la imagen"
 						></v-text-field>
 					</div>
+					<!-- Campos para la pestaña 2 -->
 					<div v-if="this.tab == 2">
 						<v-text-field
 							v-model="nueva_sala.n_filas"
@@ -84,7 +81,7 @@
 				</v-card-text>
 
 				<v-divider></v-divider>
-
+				
 				<v-card-actions>
 					<v-spacer></v-spacer>
 					<v-btn color="primary" text @click="agregar_dialog = false">
@@ -105,11 +102,17 @@ export default {
 	name: "Home",
 	components: {},
 	data: () => ({
+		// Valor de la pestaña de la tabla
 		tab: 0,
+		// Nombre de las pestañas
 		tabs: ["Funciones", "Peliculas", "Salas"],
+		// Nombre de los headers
 		headers: [],
+		// Elementos que contendrá la tabla
 		elementos: [],
+		// Activación del dialog (Ventana para agregar elementos)
 		agregar_dialog: false,
+		// Objetos vacios que sirven como esqueleto
 		nueva_pelicula: {
 			nombre: "",
 			descr: "",
@@ -126,10 +129,12 @@ export default {
 			n_asientos: 0,
 		},
 	}),
+	// Método cuando se crea el componente
 	created() {
 		fill_data(this.tab);
 	},
 	methods: {
+		// Llenar datos de la tabla dependiendo en que pestaña se encuentre
 		fill_data(tab) {
 			if (tab == 0) {
 				this.get_funciones();
@@ -139,7 +144,9 @@ export default {
 				this.get_salas();
 			}
 		},
+		// Regresa la información de las salas
 		async get_salas() {
+			// Petición http al server con la ruta definida ahí
 			const salas = await this.axios.get("/sala/get-salas");
 			this.elementos = salas.data;
 			this.headers = [
@@ -229,21 +236,19 @@ export default {
 				},
 			];
 		},
+		// 
 		async agregar(tab) {
+			// Agregar en la base de datos elementos
 			if (tab == 0) {
-				await this.axios.post(
-					"/funcion/agregar-funcion",
-					this.nueva_funcion
-				);
+				await this.axios.post( "/funcion/agregar-funcion", this.nueva_funcion);
 			} else if (tab == 1) {
-				await this.axios.post(
-					"/pelicula/agregar-pelicula",
-					this.nueva_pelicula
-				);
+				await this.axios.post( "/pelicula/agregar-pelicula", this.nueva_pelicula);
 			} else if (tab == 2) {
 				await this.axios.post("/sala/agregar-sala", this.nueva_sala);
 			}
+			// Actualizar tabla
 			this.fill_data(tab);
+			// Cerrar el formulario
 			this.agregar_dialog = false;
 		},
 	},

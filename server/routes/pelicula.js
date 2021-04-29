@@ -16,6 +16,7 @@ router.get('/get-peliculas', async(req, res) => {
     }
 })
 
+// Inserta una nueva pelicula en la base de datos
 router.post('/agregar-pelicula', async(req, res) => {
     try{
         let { nombre, descr, imagen } = req.body;

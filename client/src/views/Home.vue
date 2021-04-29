@@ -26,9 +26,11 @@
 				</v-card-text>
 
 				<v-card-actions>
-				<v-btn class="mx-auto" @click="reserve" color="primary">
-					Comprar boleto
-				</v-btn>
+					<router-link class="mx-auto" :to="'/compra/'+funcion.id">
+						<v-btn class="mx-auto" color="primary">
+							Comprar boleto
+						</v-btn>
+					</router-link>
 				</v-card-actions>
 			</v-card>
 		</v-row>

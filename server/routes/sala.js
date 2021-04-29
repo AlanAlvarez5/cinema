@@ -16,6 +16,21 @@ router.get('/get-salas', async(req, res) => {
     }
 })
 
+router.post('/get-sala', async(req, res) => {
+    try {
+        let { sala_id } = req.body
+        const salas = await database.query(`SELECT * FROM sala WHERE id = ${sala_id}`)
+        res.json(salas)
+    } catch (error) {
+        console.log(error)
+        return res.status(400).json({
+            mensaje: 'Query Error',
+            error
+        })
+    }
+})
+
+// Inserta una sala en la base de datos
 router.post('/agregar-sala', async(req, res) => {
     try{
         let { n_filas, n_asientos } = req.body;

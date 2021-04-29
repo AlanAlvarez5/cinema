@@ -16,4 +16,30 @@ router.get('/get-compras', async(req, res) => {
     }
 })
 
+router.post('/agregar-compra', async(req, res) => {
+    try{
+        let { id_asiento, id_funcion, fecha_hora, total } = req.body;
+
+        await database.query(`INSERT INTO compra (id_asiento, id_funcion, fecha_hora, total ) 
+        VALUES ('${id_asiento}', ${id_funcion}, '${fecha_hora}', ${total})`);
+
+        await database.query(`
+        UPDATE asiento
+        SET estado = 1
+        WHERE id = '${id_asiento}';
+        `)
+
+        res.json({
+            mensaje: 'PRODUCT_ADDED'
+        });
+    }
+    catch (error){
+        console.log(error)
+        return res.status(400).json({
+            mensaje: 'Query Error',
+            error
+        });
+    }
+})
+
 module.exports = router;
