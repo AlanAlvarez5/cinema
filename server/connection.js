@@ -5,7 +5,7 @@ import { promisify } from 'util';
 const database = {
     host: 'localhost',
     user: 'root',
-    password: 'easiermean5',
+    password: 'elitezer665TT',
     database: 'cinema'
 }
 
